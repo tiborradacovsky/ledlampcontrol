@@ -36,7 +36,7 @@ sys.path.append("..")
 ##write to ledController
 
 device = ArduinoUsbDevice(idVendor=0x16c0, idProduct=0x05df)
-file = open("ledConfig.txt")
+file = open("led.conf")
 while True:
     try:
         device.write(ord(file.read(1)))
