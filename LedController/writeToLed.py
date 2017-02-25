@@ -1,5 +1,7 @@
 import sys,usb
 
+##definitions for usb lib
+
 REQUEST_TYPE_SEND = usb.util.build_request_type(usb.util.CTRL_OUT, usb.util.CTRL_TYPE_CLASS, usb.util.CTRL_RECIPIENT_DEVICE)
 USBRQ_HID_SET_REPORT = 0x09
 USB_HID_REPORT_TYPE_FEATURE = 0x03
@@ -10,7 +12,7 @@ class ArduinoUsbDevice(object):
         self.idProduct = idProduct
         self.device = usb.core.find(idVendor=self.idVendor,idProduct=self.idProduct)
         if not self.device:
-            raise Exception("Device not found")
+            raise Exception("Device not found.")
 
     def write(self, byte):
         self._transfer(REQUEST_TYPE_SEND, USBRQ_HID_SET_REPORT, byte, [])
@@ -28,8 +30,13 @@ class ArduinoUsbDevice(object):
 
 sys.path.append("..")
 
+
+
+
+##write to ledController
+
 device = ArduinoUsbDevice(idVendor=0x16c0, idProduct=0x05df)
-file = open("volajaky_textovy_subor.txt")
+file = open("ledConfig.txt")
 while True:
     try:
         device.write(ord(file.read(1)))
