@@ -1,0 +1,44 @@
+#color{
+	width: 20%;
+	height: 15%;
+	font-size: 150%;
+	position:relative;
+	left:1%;
+	display:block;
+	text-align:center;
+}
+#confirm{
+	width: 20%;
+	height: 10%;
+	position:relative;
+	margin-top:1%;
+	left:1%;
+	font-size:25px;
+} 
+body>div{
+	padding-left:1%;
+	position:absolute;
+	box-shadow: 15px 10px 15px 0px #C0C0C0
+}
+@media only screen and (max-width: 1080px) {
+	#color{
+		left:1%;
+		width: 48%;
+		height: 10%;
+		font-size: 150%;
+		position:absolute;
+		display:inline;
+	}
+	#confirm{
+		width: 48%;
+		height: 10%;
+		position:absolute;
+		margin-top:0px;
+		left:51%;
+	} 
+	body>div{
+		padding-top:1%;
+		position:absolute;
+		box-shadow: 15px 10px 15px 0px #C0C0C0;
+	}	
+}
