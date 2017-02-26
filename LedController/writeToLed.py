@@ -1,6 +1,6 @@
 import sys,usb
 
-##definitions for usb lib
+##INIT
 
 REQUEST_TYPE_SEND = usb.util.build_request_type(usb.util.CTRL_OUT, usb.util.CTRL_TYPE_CLASS, usb.util.CTRL_RECIPIENT_DEVICE)
 USBRQ_HID_SET_REPORT = 0x09
@@ -30,6 +30,7 @@ class ArduinoUsbDevice(object):
 
 sys.path.append("..")
 
+#INITEND
 
 
 
