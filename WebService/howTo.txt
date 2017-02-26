@@ -1,0 +1,14 @@
+Lamp details are available via rest service. To obtain details for lamp #2 you need to do GET request http://localhost:8080/lamps/2
+
+Supported GET requests:
+http://localhost:8080/lamps
+http://localhost:8080/lamps/{lampID}
+
+To obtain details for all lamps:
+http://localhost:8080/lamps
+To obtain details for 3rd lamp:
+http://localhost:8080/lamps/3
+
+---
+web.py should be installed: http://webpy.org/install
+python rest service howTo: http://www.dreamsyssoft.com/python-scripting-tutorial/create-simple-rest-web-service-with-python.php?/archives/6-Create-a-simple-REST-web-service-with-Python.html
