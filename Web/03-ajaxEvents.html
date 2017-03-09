@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Led lamp control</title>
+    <script src="jscolor.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+</head>
+<body>
+
+    <h3>Led Lamp Control</h3>
+
+    <form action="#">
+        
+        <p>
+        Led #:
+        <select name="ledId" id="ledId">
+            <option value="1">1</option> 
+            <option value="2">2</option> 
+            <option value="3">3</option> 
+        </select>
+        </p>    
+    
+        <div id="name">
+        </div>
+        
+        <p>
+            Color:
+            <input name="color" id="color" class="jscolor" value="99cc00" >
+        </p>
+     
+        <p>
+            On = 1 / Off = 0:
+            <input name="operation" id="operation" value="">
+        </p>
+        <input type="button" id="saveData" alt="Save data" value="save">
+        <input type="button" id="loadData" alt="Load data" value="load">
+        
+    </form>
+    
+    <script>
+    
+    $("#saveData").click(function() {
+        console.log("saveData button clicked");
+
+        console.log( $("#ledId").val() );
+        console.log( $("#color").val() );
+        if (!$("#operation").val()) {
+            $("#operation").val(0);
+        }
+
+        $.ajax({ 
+            url: 'http://localhost:8080/save', 
+            type: 'POST', 
+            contentType: 'application/json', 
+            data: JSON.stringify({ 
+                "ledId": $("#ledId").val(), 
+                "color": $("#color").val(),
+                "operation": $("#operation").val()
+            }), 
+            success: function(data) { 
+                console.log("Post SUCCESS")
+            }, 
+            error: function() { 
+                console.log("Post ERRROR")
+            }  
+        });  
+    });  
+    
+    $("#loadData").click(function() {
+        console.log("loadData button clicked");        
+        
+        //console.log( $("#ledId").val() );
+        console.log('Previous color: ' + $("#color").val() );
+        console.log('Previous operation: ' + $().val("#operation"));
+        
+        $.ajax({ 
+            url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+            type: 'GET',
+            
+            success: function(data) { 
+                console.log("Get SUCCESS")
+                //console.log(data);
+                
+                lampDetails = jQuery.parseJSON(data);
+                
+                console.log('Color updated to: ' + lampDetails.color);
+                $("#color").val( lampDetails.color );
+                
+                console.log('Operation updated to: '+ lampDetails.operation);
+                $("#operation").val(lampDetails.operation);
+                
+                console.log('Lamp name updated to: ' + lampDetails.name);
+                $("#name").val(lampDetails.name);
+                
+            }, 
+            error: function() { 
+                console.log("Get ERRROR")
+            }  
+        }); 
+        
+    });
+                      
+    </script>
+    
+</body>
+</html>

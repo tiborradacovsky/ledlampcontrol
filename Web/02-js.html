@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Led lamp control</title>
+    <script src="jscolor.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+</head>
+<body>
+
+    <h3>Led Lamp Control</h3>
+
+    <form action="#">
+    
+        <p>
+        Led #:
+        <select name="ledId" id="ledId">
+            <option value="1">1</option> 
+            <option value="2">2</option> 
+            <option value="3">3</option> 
+        </select>
+        </p>    
+    
+        <p>
+            Color:
+            <input name="color" id="color" class="jscolor" value="99cc00">
+        </p>
+     
+        <input type="button" id="saveData" alt="Save data" value="save">
+        <input type="button" id="loadData" alt="Load data" value="load">
+        
+    </form>
+    
+    <script>
+    
+    $("#saveData").click(function() {
+        console.log("saveData button clicked");
+
+        console.log( $("#ledId").val() );
+        console.log( $("#color").val() );
+    });  
+    
+    $("#loadData").click(function() {
+        console.log("loadData button clicked");        
+        
+        console.log( $("#ledId").val() );
+        console.log( $("#color").val() );
+    });
+                      
+    </script>
+    
+</body>
+</html>
