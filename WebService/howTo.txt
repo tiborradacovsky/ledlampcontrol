@@ -9,6 +9,10 @@ http://localhost:8080/lamps
 To obtain details for 3rd lamp:
 http://localhost:8080/lamps/3
 
+To save setting POST request is required:
+http://localhost:8080/save
+
+
 ---
 web.py should be installed: http://webpy.org/install
 python rest service howTo: http://www.dreamsyssoft.com/python-scripting-tutorial/create-simple-rest-web-service-with-python.php?/archives/6-Create-a-simple-REST-web-service-with-Python.html
