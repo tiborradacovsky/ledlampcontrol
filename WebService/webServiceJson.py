@@ -10,7 +10,8 @@ urls = (
     '/', 'index',
     '/lamps', 'list_lamps',
     '/lamps/(.*)', 'get_lamp',
-    '/save', 'saveLedColor'
+    '/save', 'saveLedColor',
+    '/getLampsCount', 'getLampsCount'
 )
 
 app = web.application(urls, globals())
@@ -52,7 +53,12 @@ class saveLedColor:
         data[postData['ledId']]['color'] = postData['color']
         data[postData['ledId']]['operation'] = postData['operation']
         print data[postData['ledId']]
-    
+
+class getLampsCount:
+    def GET(self):
+        print 'Request to lampCount:', len(data)
+        return len(data)
+        
             
 if __name__ == "__main__":
     app.run()
