@@ -62,7 +62,7 @@
                 console.log("Post SUCCESS")
             }, 
             error: function() { 
-                console.log("Post ERRROR")
+                console.log("Post ERROR")
             }  
         });  
     });  
@@ -74,30 +74,23 @@
         console.log('Previous color: ' + $("#color").val() );
         console.log('Previous operation: ' + $().val("#operation"));
         
-        $.ajax({ 
-            url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+        $.ajax({
+            url: 'http://localhost:8080/getLampsCount',
             type: 'GET',
+            success: function(data) {
+                console.log("GET success");
+                
+                $("#ledId").empty();
+                for (var i=1; i<=data; i++) {
+                    $("#ledId").append('<option id=' + i + ' value=' + i + '>No_' + i + '</option>');
+                }
+                
+            },
             
-            success: function(data) { 
-                console.log("Get SUCCESS")
-                //console.log(data);
-                
-                lampDetails = jQuery.parseJSON(data);
-                
-                console.log('Color updated to: ' + lampDetails.color);
-                $("#color").val( lampDetails.color );
-                
-                console.log('Operation updated to: '+ lampDetails.operation);
-                $("#operation").val(lampDetails.operation);
-                
-                console.log('Lamp name updated to: ' + lampDetails.name);
-                $("#name").val(lampDetails.name);
-                
-            }, 
-            error: function() { 
-                console.log("Get ERRROR")
-            }  
-        }); 
+            error: function() {
+                console.log("GET error");
+            }
+        });; 
         
     });
                       

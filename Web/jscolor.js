@@ -1027,7 +1027,7 @@ var jsc = {
         this.pointerThickness = 2; // px
 		this.zIndex = 1000;
 		this.container = null; // where to append the color picker (BODY element by default)
-
+		
 
 		for (var opt in options) {
 			if (options.hasOwnProperty(opt)) {
@@ -1423,7 +1423,7 @@ var jsc = {
 			}
 
 			var p = jsc.picker;
-
+			
 			var displaySlider = !!jsc.getSliderComponent(THIS);
 			var dims = jsc.getPickerDims(THIS);
 			var crossOuterSize = (2 * THIS.pointerBorderWidth + THIS.pointerThickness + 2 * THIS.crossSize);
@@ -1438,6 +1438,7 @@ var jsc = {
 			p.wrap.style.width = (dims[0] + 2 * THIS.borderWidth) + 'px';
 			p.wrap.style.height = (dims[1] + 2 * THIS.borderWidth) + 'px';
 			p.wrap.style.zIndex = THIS.zIndex;
+			p.wrap.style.display = 'none'; //picker MUST be shown through CSS or JS, otherwise nothing will happen
 
 			// picker
 			p.box.style.width = dims[0] + 'px';

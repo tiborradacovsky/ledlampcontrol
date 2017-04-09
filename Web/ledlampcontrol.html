@@ -1,0 +1,254 @@
+
+<html>
+	<head>
+		<link rel="shortcut icon" type="image/png" href="Colorwheel-Circle-256.png"/>
+		<title>LED Lamp Control</title>
+		<script src="jquery-3.1.1.min.js"></script>
+		<script src="jscolor.js"></script>
+		<link rel="stylesheet" type="text/css" href="stylesheet2.css"
+	</head>
+	<body>
+		<!--
+		<img src="http://blog.nema.org/wp-content/uploads/2015/12/iStock_000048404604_Double-1024x768.jpg" style="position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:-100">
+		-->
+		<p style="font-size:50px;" style><b> LED Lamp Control</b> </p>
+		<form  action="#" style="font-size:35px">
+			<label for="color" style="display:block">Select your color:</label>
+			<input type="text" name="color" id="color" maxlength=6>
+			<label for="select" style="display:block">Select LED Lamp:</label>
+			<select id="select">
+				<option value="LED1">LED1</option>
+			</select>
+			<input type="button" id="confirm" style="margin-bottom:20px" value="Submit">			
+		</form>
+		<script>
+			var hex =["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+			var r_g_b = Math.round(Math.random()*2); 
+			switch (r_g_b){
+				case 0:
+					var hexCol = "FF"+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)];
+					$("#color").val(hexCol);
+					console.log("Initial color set: "+hexCol);	
+					break;
+				case 1:
+					var hexCol = hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+"FF"+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)];
+					$("#color").val(hexCol);
+					console.log("Initial color set: "+hexCol);	
+					break;
+				case 2:
+					var hexCol = hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+"FF";
+					$("#color").val(hexCol);
+					console.log("Initial color set: "+hexCol);						
+			};			
+			var width=$( window ).width();
+			var height=$( window ).height();
+			var picker_class;
+			if(width>1080){
+				var width_picker= width*0.5-25;
+				var height_picker= height*0.6;
+				picker_class="jscolor {width:"+width_picker+", height:"+height_picker+", position:'right'}";
+				$("#color").addClass(picker_class);
+				console.log("Picker size set: "+width_picker+", "+height_picker)
+			} else if (width<=1080){
+				var width_picker= width*0.95-50;
+				var height_picker= height*0.6;
+				picker_class="jscolor {width:"+width_picker+", height:"+height_picker+", position:'bottom'}";
+				$("#color").addClass(picker_class);
+				console.log("Picker size set: "+width_picker+", "+height_picker)
+			};
+			var color = $("#color").val();
+			var led = $("#select").val();
+			$(document).ready(function(){
+				console.log("Get lamp count initiated")
+				$.ajax({
+					url: 'http://localhost:8080/getLampsCount',
+					type: 'GET',
+					success: function(data) {
+						console.log("Get lamp count SUCCESS");
+						
+						$("#ledId").empty();
+						for (var i=1; i<=data; i++) {
+							$("#ledId").append('<option id=' + i + ' value=' + i + '>No_' + i + '</option>');
+						}
+						
+					},
+					
+					error: function() {
+						console.log("Get lamp count ERROR");
+					}
+				});
+				console.log("Data load initiated")
+				$.ajax({ 
+					url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+					type: 'GET',
+				
+					success: function(data) { 
+						console.log("Get lamp data SUCCESS")
+						//console.log(data);
+				
+						lampDetails = jQuery.parseJSON(data);
+						
+						console.log('Color updated to: ' + lampDetails.color);
+						$("#color").val( lampDetails.color );
+							
+						console.log('Lamp name updated to: ' + lampDetails.name);
+						$("#name").val(lampDetails.name);
+						
+						$("#statusMsg").text("Data load success.")
+										}, 
+					error: function() { 
+						console.log("Get lamp data ERROR")
+						
+						$("#statusMsg").text("Data load error.")
+					}  
+				}); 
+				$("input").click(function(){
+					$('body>div').show(1500);
+				});
+				$("#confirm").click(function(){
+					console.log("POST iniciated with data: "+led+" - "+color);
+					 $.ajax({ 
+						url: 'http://localhost:8080/save', 
+						type: 'POST', 
+						contentType: 'application/json', 
+						data: JSON.stringify({ 
+							"ledId": led, 
+							"color": color
+						}), 
+						success: function(data) { 
+							console.log("Post SUCCESS")
+						}, 
+						error: function() { 
+							console.log("Post ERROR")
+						}  
+					});
+				});
+				function getData(){
+					console.log("GET iniciated");
+					$.ajax({
+						url: 'http://localhost:8080/getLampsCount',
+						type: 'GET',
+						success: function(data) {
+							console.log("GET success");
+							$("#select").empty();
+							for (var i=1; i<=data; i++) {
+								$("#select").append('<option id=' + i + ' value=' + i + '>' + i + '</option>');
+							}
+                		},
+            
+						error: function() {
+							console.log("GET error");
+						}	
+					});
+				};
+				setInterval(
+					function(){
+						console.log("Get lamp count initiated")
+						$.ajax({
+							url: 'http://localhost:8080/getLampsCount',
+							type: 'GET',
+							success: function(data) {
+								console.log("Get lamp count SUCCESS");
+								
+								$("#ledId").empty();
+								for (var i=1; i<=data; i++) {
+									$("#ledId").append('<option id=' + i + ' value=' + i + '>No_' + i + '</option>');
+								}
+								
+							},
+							
+							error: function() {
+								console.log("Get lamp count ERROR");
+							}
+						});
+						console.log("Data load initiated")
+						$.ajax({ 
+							url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+							type: 'GET',
+				
+							success: function(data) { 
+								console.log("Get lamp data SUCCESS")
+								//console.log(data);
+				
+								lampDetails = jQuery.parseJSON(data);
+				
+								console.log('Color updated to: ' + lampDetails.color);
+								$("#color").val( lampDetails.color );
+									
+								console.log('Lamp name updated to: ' + lampDetails.name);
+								$("#name").val(lampDetails.name);
+								
+								$("#statusMsg").text("Data load success.")
+				
+							}, 
+							error: function() { 
+								console.log("Get lamp data ERROR")
+								
+								$("#statusMsg").text("Data load error.")
+							}  
+						}); 
+					;}	
+				,3000);
+				/*$("#loadData").click(function() {
+        console.log("loadData button clicked");        
+        
+        //console.log( $("#ledId").val() );
+        console.log('Previous color: ' + $("#color").val() );
+        console.log('Previous operation: ' + $().val("#operation"));
+        
+        $.ajax({ 
+            url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+            type: 'GET',
+            
+            success: function(data) { 
+                console.log("Get SUCCESS")
+                //console.log(data);
+                
+                lampDetails = jQuery.parseJSON(data);
+                
+                console.log('Color updated to: ' + lampDetails.color);
+                $("#color").val( lampDetails.color );
+                
+                console.log('Operation updated to: '+ lampDetails.operation);
+                $("#operation").val(lampDetails.operation);
+                
+                console.log('Lamp name updated to: ' + lampDetails.name);
+                $("#name").val(lampDetails.name);
+                
+                $("#statusMsg").text("Data load success.")
+                
+            }, 
+            error: function() { 
+                console.log("Get ERRROR")
+                
+                $("#statusMsg").text("Data load error.")
+            }  
+        }); 
+        
+    });
+        
+    $("#getLampsNumber").click( function() {
+        console.log("getLampsNumber clicked.");
+        
+        $.ajax({
+            url: 'http://localhost:8080/getLampsCount',
+            type: 'GET',
+            success: function(data) {
+                console.log("GET success");
+                
+                $("#ledId").empty();
+                for (var i=1; i<=data; i++) {
+                    $("#ledId").append('<option id=' + i + ' value=' + i + '>No_' + i + '</option>');
+                }
+                
+            },
+            
+            error: function() {
+                console.log("GET error");
+            }
+        });
+    });*/
+			});
+		</script>	
+	</body>
+</html>
