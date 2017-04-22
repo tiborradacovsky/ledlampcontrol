@@ -16,31 +16,12 @@
 			<label for="color" style="display:block">Select your color:</label>
 			<input type="text" name="color" id="color" maxlength=6>
 			<label for="ledId" style="display:block">Select LED Lamp:</label>
-			<select id="ledId" onchange="getLampData()">
+			<select id="ledId">
 				<option value="1">LED 1</option>
 			</select>
 			<input type="button" id="confirm" style="margin-bottom:20px" value="Submit">			
 		</form>
-		<script>
-			var hex =["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-			var r_g_b = Math.round(Math.random()*2); 
-			switch (r_g_b){
-				case 0:
-					var hexCol = "FF"+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)];
-					$("#color").val(hexCol);
-					console.log("Initial color set: "+hexCol);	
-					break;
-				case 1:
-					var hexCol = hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+"FF"+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)];
-					$("#color").val(hexCol);
-					console.log("Initial color set: "+hexCol);	
-					break;
-				case 2:
-					var hexCol = hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+hex[Math.round(Math.random()*15)]+"FF";
-					$("#color").val(hexCol);
-					console.log("Initial color set: "+hexCol);						
-			};
-			
+		<script>	
 			var width=$( window ).width();
 			var height=$( window ).height();
 			var picker_class;
@@ -75,7 +56,8 @@
 						lampDetails = jQuery.parseJSON(data);
 				
 						console.log('Color updated to: ' + lampDetails.color);
-						if(serverColor!=lampDetails.color){
+						console.log(serverColor);
+						if(serverColor!=(lampDetails.color).toUpperCase()){
 							$("#color").val( (lampDetails.color).toUpperCase() );
 							$("#color").css("background-color",$("#color").val());
 							serverColor=$("#color").val();
@@ -87,7 +69,6 @@
 					error: function() { 
 						console.log("Get lamp data ERROR")
 								
-						$("#statusMsg").text("Data load error.")
 					}  
 				})
 			}
@@ -99,12 +80,12 @@
 					type: 'GET',
 					success: function(data) {
 						console.log("Get lamp count SUCCESS");
-						
+						val=$("#ledId").val();
 						$("#ledId").empty();
 						for (var i=1; i<=data; i++) {
 							$("#ledId").append('<option id=' + i + ' value=' + i + '>LED ' + i + '</option>');
 						}
-						
+						$("#ledId").val(val);
 					},
 					
 					error: function() {
@@ -138,60 +119,11 @@
 						}  
 					});
 				});
+				$("#ledId").change(function(){getLampData()})
 				setInterval(function(){
 					getLampCount()
 					getLampData()
 				},3000)
-				/*
-				setInterval(
-					function(){
-						console.log("Get lamp count initiated")
-						$.ajax({
-							url: 'http://localhost:8080/getLampsCount',
-							type: 'GET',
-							success: function(data) {
-								console.log("Get lamp count SUCCESS");
-								
-								$("#ledId").empty();
-								for (var i=1; i<=data; i++) {
-									$("#ledId").append('<option id=' + i + ' value=' + i + '>LED ' + i + '</option>');
-								}
-								
-							},
-							
-							error: function() {
-								console.log("Get lamp count ERROR");
-							}
-						});
-						console.log("Data load initiated")
-						$.ajax({ 
-							url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
-							type: 'GET',
-				
-							success: function(data) { 
-								console.log("Get lamp data SUCCESS")
-								//console.log(data);
-				
-								lampDetails = jQuery.parseJSON(data);
-				
-								console.log('Color updated to: ' + lampDetails.color);
-								$("#color").val( lampDetails.color );
-									
-								console.log('Lamp name updated to: ' + lampDetails.name);
-								$("#name").val(lampDetails.name);
-								
-								$("#statusMsg").text("Data load success.")
-				
-							}, 
-							error: function() { 
-								console.log("Get lamp data ERROR")
-								
-								$("#statusMsg").text("Data load error.")
-							}  
-						}); 
-					;}	
-				,3000);
-				*/
 			});
 		</script>	
 	</body>
