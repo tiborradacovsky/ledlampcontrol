@@ -1,7 +1,9 @@
 #color{
 	width: 15%;
+	min-width:200px;
 	height: 7%;
-	font-size: 100%;
+	min-height:100px;
+	font-size: 50px;
 	position:relative;
 	left:0.5%;
 	display:block;
@@ -24,11 +26,79 @@ body>div{
 select{
 	position:relative;
 	left:0.5%;
-	font-size:20px;
-	width:5%;
-	height:3%;
+	font-size:40px;
+	min-width:120px;
+	height:6%;
+	min-height:50px;
 } 
 label{
 	margin-top:10px;
 	margin-bottom:10px;
+	font-size:30px;
+	display:block;
 }
+#operation{
+	width:200px;
+	height:200px;
+	position:relative;
+}
+.active{
+	background-image:url("light_bulb_on.png");
+	background-size:200px 200px;
+}
+.inactive{
+	background-image:url("light_bulb_off.png");
+	background-size:200px 200px;
+}
+@media only screen and (max-width:1080px){
+	.inputs{
+		position:relative;
+		display:inline-table;
+		height:15%;
+		box-sizing: border-box;
+		width:49%;
+		margin:auto;
+	}
+	#color{
+		left:5%;
+		width: 90%;
+		height: 65%;
+		}
+	#confirm{
+		width: 98%;
+		height: 10%;
+		left:1%;
+		font-size:25px;
+	}
+	body>div{
+		position:relative;
+		box-shadow: 15px 10px 15px 0px #C0C0C0;
+	}
+	select{
+		position:relative;
+		left:5%;
+		font-size:30px;
+		width:12%;
+		min-width:120px;
+		height:3%;
+		min-height:25px;
+	} 
+	label{
+		font-size:30px;
+		min-height:25%;
+	}
+	#operation{
+		width:25%;
+		height:65%;
+		position:absolute;
+		left:40%;
+		top:30%;
+		background-repeat:no-repeat;
+	}
+	.active{
+		background-size:100% 100%;
+	}
+	.inactive{
+		background-size:100% 100%;
+	}
+}	

@@ -12,119 +12,21 @@
 		<img src="http://blog.nema.org/wp-content/uploads/2015/12/iStock_000048404604_Double-1024x768.jpg" style="position:absolute; left:0px; top:0px; width:100%; height:100%; z-index:-100">
 		-->
 		<p style="font-size:50px;" style><b> LED Lamp Control</b> </p>
-		<form  action="#" style="font-size:35px">
-			<label for="color" style="display:block">Select your color:</label>
-			<input type="text" name="color" id="color" maxlength=6>
-			<label for="ledId" style="display:block">Select LED Lamp:</label>
-			<select id="ledId">
-				<option value="1">LED 1</option>
-			</select>
-			<input type="button" id="confirm" style="margin-bottom:20px" value="Submit">			
-		</form>
-		<script>	
-			var width=$( window ).width();
-			var height=$( window ).height();
-			var picker_class;
-			if(width>1080){
-				var width_picker= width*0.5-25;
-				var height_picker= height*0.6;
-				picker_class="jscolor {width:"+width_picker+", height:"+height_picker+", position:'right'}";
-				$("#color").addClass(picker_class);
-				console.log("Picker size set: "+width_picker+", "+height_picker)
-			} else if (width<=1080){
-				var width_picker= width*0.95-50;
-				var height_picker= height*0.6;
-				picker_class="jscolor {width:"+width_picker+", height:"+height_picker+", position:'bottom'}";
-				$("#color").addClass(picker_class);
-				console.log("Picker size set: "+width_picker+", "+height_picker)
-			};
-			
-			serverColor="";
-			color=$("#color").val();
-			led=$("#ledId").val();
-			
-			function getLampData(){
-				console.log("Data load initiated")
-				$.ajax({ 
-					url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
-					type: 'GET',
-		
-					success: function(data) { 
-						console.log("Get lamp data SUCCESS")
-						//console.log(data);
-				
-						lampDetails = jQuery.parseJSON(data);
-				
-						console.log('Color updated to: ' + lampDetails.color);
-						console.log(serverColor);
-						if(serverColor!=(lampDetails.color).toUpperCase()){
-							$("#color").val( (lampDetails.color).toUpperCase() );
-							$("#color").css("background-color",$("#color").val());
-							serverColor=$("#color").val();
-						
-							console.log('Lamp name updated to: ' + lampDetails.name);
-							$("#name").val(lampDetails.name);
-						}								
-					}, 
-					error: function() { 
-						console.log("Get lamp data ERROR")
-								
-					}  
-				})
-			}
-		
-			function getLampCount(){
-				console.log("Get lamp count initiated")
-				$.ajax({
-					url: 'http://localhost:8080/getLampsCount',
-					type: 'GET',
-					success: function(data) {
-						console.log("Get lamp count SUCCESS");
-						val=$("#ledId").val();
-						$("#ledId").empty();
-						for (var i=1; i<=data; i++) {
-							$("#ledId").append('<option id=' + i + ' value=' + i + '>LED ' + i + '</option>');
-						}
-						$("#ledId").val(val);
-					},
+		<form>
+			<div class="inputs">
+				<label for="color" style="display:block">Select your color:</label>
+				<input type="text" name="color" id="color" maxlength=6">
+			</div>	
+			<div class="inputs">
+				<label for="ledId" style="display:block">Select LED Lamp:</label>
+				<select id="ledId">
+					<option value="1">LED 1</option>
+				</select>
+				<div id="operation" class="inactive" value="0"></div>
+			</div>
+			<input type="button" id="confirm" style="margin-bottom:20px" value="Submit">
 					
-					error: function() {
-						console.log("Get lamp count ERROR");
-					}
-				});
-			}
-			
-			$(document).ready(function(){
-				getLampCount()
-				getLampData()
-				$("input").click(function(){
-					$('body>div').show(1500);
-				});
-				$("#confirm").click(function(){
-					console.log("POST iniciated with data: "+led+" - "+color);
-					 $.ajax({ 
-						url: 'http://localhost:8080/save', 
-						type: 'POST', 
-						contentType: 'application/json', 
-						data: JSON.stringify({ 
-							"ledId": $("#ledId").val(), 
-							"color": $("#color").val(),
-							"operation": 1
-						}), 
-						success: function(data) { 
-							console.log("Post SUCCESS")
-						}, 
-						error: function() { 
-							console.log("Post ERROR")
-						}  
-					});
-				});
-				$("#ledId").change(function(){getLampData()})
-				setInterval(function(){
-					getLampCount()
-					getLampData()
-				},3000)
-			});
-		</script>	
+		</form>	
+		<script src="scripts.js"></script>
 	</body>
 </html>
