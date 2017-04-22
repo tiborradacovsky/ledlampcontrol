@@ -16,35 +16,36 @@ if(width>1080){
 };
 
 serverData=[];
-color=$("#color").val();
-led=$("#ledId").val();
+color=$("#color")
+options=$("#ledId")
+operation=$("#operation")
 
 function toggleOperation(){
-	if ($("#operation").val()==0){
-		$("#operation").removeClass("inactive");
-		$("#operation").addClass("active");
-		$("#operation").val(1);
+	if (operation.val()==0){
+		operation.removeClass("inactive");
+		operation.addClass("active");
+		operation.val(1);
 	}else{
-		$("#operation").removeClass("active");
-		$("#operation").addClass("inactive");
-		$("#operation").val(0);
+		operation.removeClass("active");
+		operation.addClass("inactive");
+		operation.val(0);
 	}	
 }
 
 function setOperation(){
-	if ($("#operation").val()==1){
-		$("#operation").removeClass("inactive");
-		$("#operation").addClass("active");
+	if (operation.val()==1){
+		operation.removeClass("inactive");
+		operation.addClass("active");
 	}else{
-		$("#operation").removeClass("active");
-		$("#operation").addClass("inactive");
+		operation.removeClass("active");
+		operation.addClass("inactive");
 	}
 }
 
 function getLampData(){
 	console.log("Data load initiated")
 	$.ajax({ 
-		url: 'http://localhost:8080/lamps/' + $("#ledId").val(), 
+		url: 'http://localhost:8080/lamps/' + options.val(), 
 		type: 'GET',
 	
 		success: function(data) { 
@@ -57,17 +58,17 @@ function getLampData(){
 			console.log('Saved server color: ' + serverData[0]);
 			
 			if(serverData[0]!=(lampDetails.color).toUpperCase()){
-				$("#color").val( (lampDetails.color).toUpperCase() );
-				$("#color").css("background-color",$("#color").val());
+				color.val( (lampDetails.color).toUpperCase() );
+				color.css("background-color",color.val());
 				serverData=[lampDetails.color,serverData[1]];
 			
 				console.log('Lamp name updated to: ' + lampDetails.name);
 				$("#name").val(lampDetails.name);
 			}	
 			if(serverData[1] != lampDetails.operation){	
-				$("#operation").val(lampDetails.operation);
+				operation.val(lampDetails.operation);
 				setOperation();
-				console.log('Operation set to :' + $("#operation").val())
+				console.log('Operation set to :' + operation.val())
 				serverData=[serverData[0],lampDetails.operation];
 			}									
 		}, 
@@ -85,12 +86,12 @@ function getLampCount(){
 		type: 'GET',
 		success: function(data) {
 			console.log("Get lamp count SUCCESS");
-				val=$("#ledId").val();
-				$("#ledId").empty();
+				val=options.val();
+				options.empty();
 				for (var i=1; i<=data; i++) {
-					$("#ledId").append('<option id=' + i + ' value=' + i + '>LED ' + i + '</option>');
+					options.append('<option id=' + i + ' value=' + i + '>LED ' + i + '</option>');
 				}
-				$("#ledId").val(val);
+				options.val(val);
 			},
 		
 			error: function() {
@@ -102,23 +103,23 @@ function getLampCount(){
 	$(document).ready(function(){
 		getLampCount()
 		getLampData()
-		$("input").click(function(){
+		color.click(function(){
 			$('body>div').show(1500);
 		});
 		$("#confirm").click(function(){
-			console.log("POST iniciated with data: "+led+" - "+color);
+			console.log("POST iniciated with data: "+options.val()+" - "+color.val());
 			 $.ajax({ 
 				url: 'http://localhost:8080/save', 
 				type: 'POST', 
 				contentType: 'application/json', 
 				data: JSON.stringify({ 
-					"ledId": $("#ledId").val(), 
-					"color": $("#color").val(),
-					"operation": $("#operation").val()
+					"ledId": options.val(), 
+					"color": color.val(),
+					"operation": operation.val()
 				}), 
 				success: function(data) { 
 					console.log("Post SUCCESS")
-					serverData=[$("#color").val(),$("#operation").val()]
+					serverData=[color.val(),operation.val()]
 				}, 
 				error: function() { 
 					console.log("Post ERROR")
