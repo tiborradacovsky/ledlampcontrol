@@ -54,22 +54,21 @@ function getLampData(){
 	
 			lampDetails = jQuery.parseJSON(data);
 	
-			console.log('Color updated to: ' + lampDetails.color);
 			console.log('Saved server color: ' + serverData[0]);
 			
 			if(serverData[0]!=(lampDetails.color).toUpperCase()){
 				color.val( (lampDetails.color).toUpperCase() );
 				color.css("background-color",color.val());
-				serverData=[lampDetails.color,serverData[1]];
-			
-				console.log('Lamp name updated to: ' + lampDetails.name);
-				$("#name").val(lampDetails.name);
+				serverData=[(lampDetails.color).toUpperCase(),serverData[1]];
+				
+				console.log('Color updated to: ' + (lampDetails.color).toUpperCase());
 			}	
 			if(serverData[1] != lampDetails.operation){	
 				operation.val(lampDetails.operation);
 				setOperation();
-				console.log('Operation set to :' + operation.val())
 				serverData=[serverData[0],lampDetails.operation];
+				
+				console.log('Operation set to :' + operation.val())
 			}									
 		}, 
 		error: function() { 
